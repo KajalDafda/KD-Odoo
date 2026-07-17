@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="ai_chatbot.FloatingButton" owl="1">
+        <div class="o_ai_chatbot_floating">
+
+            <!-- Kept in the DOM once opened; hidden via CSS class on minimize
+                 so the AiChatWidget subcomponent (and its conversation state)
+                 is never destroyed. Close (unlike minimize) unmounts it and
+                 starts a fresh conversation next time. -->
+            <div t-if="state.mounted"
+                 t-attf-class="o_ai_chatbot_panel {{ !state.open ? 'o_ai_chatbot_panel_hidden' : '' }}">
+                <div class="o_ai_chatbot_panel_header">
+                    <span class="o_ai_chatbot_panel_title">
+                        <span class="o_ai_chatbot_logo">KD</span>
+                    </span>
+                    <div class="o_ai_chatbot_header_actions">
+                        <div class="o_ai_chatbot_menu_wrapper">
+                            <button class="o_ai_chatbot_icon_btn"
+                                    t-on-click="toggleMenu"
+                                    title="More options">
+                                <i class="fa fa-ellipsis-v"/>
+                            </button>
+                            <div t-if="state.menuOpen" class="o_ai_chatbot_dropdown">
+                                <div class="o_ai_chatbot_dropdown_item" t-on-click="openSettings">
+                                    <i class="fa fa-cog"/> Settings
+                                </div>
+                                <div class="o_ai_chatbot_dropdown_item" t-on-click="openHistory">
+                                    <i class="fa fa-history"/> History
+                                </div>
+                            </div>
+                        </div>
+                        <button class="o_ai_chatbot_icon_btn"
+                                t-on-click="minimize"
+                                title="Minimize">
+                            <i class="fa fa-minus"/>
+                        </button>
+                        <button class="o_ai_chatbot_icon_btn"
+                                t-on-click="close"
+                                title="Close">
+                            <i class="fa fa-times"/>
+                        </button>
+                    </div>
+                </div>
+                <div class="o_ai_chatbot_panel_body">
+                    <AiChatWidget/>
+                </div>
+            </div>
+
+            <button class="o_ai_chatbot_fab" t-on-click="toggle" title="KD Bot - AI Assistant">
+                <i t-if="!state.open" class="fa fa-comments o_ai_chatbot_fab_icon"/>
+                <span t-else="" class="o_ai_chatbot_fab_logo">KD</span>
+            </button>
+        </div>
+    </t>
+
+</templates>

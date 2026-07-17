@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_ai_chatbot" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.ai.chatbot</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="AI Chatbot" name="ai_chatbot">
+                    <block title="AI Chatbot Configuration" name="ai_chatbot_config">
+                        <setting id="ai_chatbot_provider_setting"
+                                 string="Provider"
+                                 help="Gemini, Groq, and Cerebras are free with no billing required.">
+                            <field name="ai_chatbot_provider"/>
+                        </setting>
+                        <setting id="ai_chatbot_api_key_setting"
+                                 string="API Key"
+                                 help="API key for your chosen provider.">
+                            <field name="ai_chatbot_api_key" password="True"/>
+                        </setting>
+                        <setting id="ai_chatbot_api_url_setting"
+                                 string="API Endpoint (optional)"
+                                 help="Leave blank to use the default endpoint for the selected provider.">
+                            <field name="ai_chatbot_api_url"/>
+                        </setting>
+                        <setting id="ai_chatbot_model_setting"
+                                 string="Model"
+                                 help="Recommended models for the selected Provider. Changing Provider updates this list.">
+                            <field name="ai_chatbot_model"/>
+                        </setting>
+                        <setting id="ai_chatbot_model_custom_setting"
+                                 string="Custom Model Override (optional)"
+                                 help="If set, overrides the Model dropdown above - use for a newly released model not listed yet.">
+                            <field name="ai_chatbot_model_custom" placeholder="e.g. claude-opus-5"/>
+                        </setting>
+                        <setting id="ai_chatbot_allowed_models_setting"
+                                 string="Allowed Models (optional)"
+                                 help="Restrict which Odoo models the AI can touch. Leave blank to allow all models the user can access.">
+                            <field name="ai_chatbot_allowed_models"
+                                   placeholder="e.g. res.partner,sale.order,product.product"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+    <record id="action_kd_bot_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'module' : 'ai_chatbot', 'bin_size': False}</field>
+    </record>
+
+</odoo>
