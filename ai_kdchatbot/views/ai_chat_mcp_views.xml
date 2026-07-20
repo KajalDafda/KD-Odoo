@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- auth_token is deliberately never shown here to avoid exposing secrets in the UI -->
+    <record id="view_ai_chat_mcp_server_list" model="ir.ui.view">
+        <field name="name">ai.chat.mcp.server.list</field>
+        <field name="model">ai.chat.mcp.server</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="url"/>
+                <field name="enabled"/>
+                <field name="last_tool_count" string="Tools Found"/>
+                <field name="last_tested"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_ai_chat_mcp_server_form" model="ir.ui.view">
+        <field name="name">ai.chat.mcp.server.form</field>
+        <field name="model">ai.chat.mcp.server</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_connect_oauth" type="object"
+                            string="Connect via OAuth" class="btn-secondary"/>
+                    <button name="action_test_connection" type="object"
+                            string="Test Connection" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="url" placeholder="https://example.com/mcp"/>
+                        <field name="auth_token" password="True"
+                               placeholder="Paste a token manually, or use Connect via OAuth below"/>
+                        <field name="enabled"/>
+                    </group>
+                    <group string="OAuth (optional - only needed if this server requires real OAuth, not a static token)">
+                        <field name="oauth_redirect_uri" readonly="1"/>
+                        <field name="oauth_authorize_url" placeholder="https://provider.com/oauth/authorize"/>
+                        <field name="oauth_token_url" placeholder="https://provider.com/oauth/token"/>
+                        <field name="oauth_client_id"/>
+                        <field name="oauth_client_secret" password="True"/>
+                        <field name="oauth_scope" placeholder="e.g. read write"/>
+                        <field name="oauth_connected_at" readonly="1"/>
+                    </group>
+                    <group string="Context for the AI (optional)">
+                        <field name="context_note" nolabel="1" colspan="2"
+                               placeholder="e.g. GitHub username: myusername"/>
+                    </group>
+                    <group string="Last Test Result">
+                        <field name="last_tested" readonly="1"/>
+                        <field name="last_tool_count" readonly="1"/>
+                        <field name="last_test_result" readonly="1" nolabel="1" colspan="2"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_ai_chat_mcp_server" model="ir.actions.act_window">
+        <field name="name">MCP Servers</field>
+        <field name="res_model">ai.chat.mcp.server</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No MCP servers connected yet.
+            </p>
+            <p>
+                Add a remote MCP server (Streamable HTTP transport) to give the AI new tools -
+                e.g. a GitHub remote MCP server, Slack, or any other MCP-compatible integration.
+                stdio-based local MCP servers are not supported.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_ai_chat_mcp_servers" name="MCP Servers"
+              parent="menu_ai_chat_configuration"
+              action="action_ai_chat_mcp_server"
+              sequence="2"/>
+
+</odoo>

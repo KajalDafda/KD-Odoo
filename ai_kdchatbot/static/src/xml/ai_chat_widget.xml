@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="ai_kdchatbot.ChatWidget" owl="1">
+        <div class="o_ai_chat_widget d-flex flex-column h-100 p-2">
+            <div class="o_ai_chat_messages flex-grow-1 overflow-auto mb-2">
+                <t t-foreach="state.messages" t-as="msg" t-key="msg_index">
+                    <div t-attf-class="o_ai_chat_bubble mb-2 p-2 rounded {{ msg.role === 'user' ? 'bg-primary text-white ms-auto' : 'bg-light' }}"
+                         style="max-width: 80%;">
+                        <t t-esc="msg.content"/>
+                    </div>
+                </t>
+                <div t-if="state.loading" class="text-muted">AI is thinking…</div>
+            </div>
+            <div class="d-flex">
+                <input t-ref="input"
+                       type="text"
+                       class="form-control me-2"
+                       placeholder="Ask the AI assistant..."
+                       t-model="state.input"
+                       t-on-keydown="onKeydown"/>
+                <button class="btn btn-primary" t-on-click="sendMessage">Send</button>
+                <button t-attf-class="btn btn-sm me-2 o_ai_chat_mic_btn {{ state.isRecording ? 'btn-danger' : 'btn-outline-secondary' }}"
+                        t-on-click="toggleRecording"
+                        title="Voice input">
+                    <i class="fa fa-microphone"/>
+                </button>
+                <button t-attf-class="btn btn-sm o_ai_chat_tts_btn {{ state.ttsEnabled ? 'btn-secondary' : 'btn-outline-secondary' }} me-1"
+                        t-on-click="toggleTts"
+                        title="Read AI replies aloud">
+                    <i t-attf-class="fa {{ state.ttsEnabled ? 'fa-volume-up' : 'fa-volume-off' }}"/>
+                </button>
+                <span class="text-muted small" t-if="state.isRecording">Listening…</span>
+            </div>
+        </div>
+    </t>
+
+</templates>
